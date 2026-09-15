@@ -16,9 +16,7 @@ import {
   levelForIndex,
   type Board,
 } from '@/logic/puzzle';
-import { shouldShowInterstitial } from '@/monetization/adPolicy';
-import { shouldShowAds } from '@/monetization/entitlements';
-import { showInterstitial } from '@/monetization/interstitial';
+import { noteGameFinished } from '@/monetization/pacing';
 import { useLevelStore } from '@/store/useLevelStore';
 import { usePremiumStore } from '@/store/usePremiumStore';
 import { MIN_TOUCH_TARGET, useTheme, withAlpha } from '@/theme';
@@ -72,17 +70,7 @@ export default function Home() {
     if (isCleared(next)) {
       clearLevel(index);
       void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      if (
-        shouldShowAds({ isPremium, isReady }) &&
-        shouldShowInterstitial({
-          gamesPlayed: 1,
-          lastInterstitialAt: 0,
-          now: Date.now(),
-          adsRemoved: isPremium,
-        })
-      ) {
-        showInterstitial();
-      }
+      void noteGameFinished();
     }
     },
     [board, cleared, spent, level.shots, shotAt, index, clearLevel, isPremium, isReady],
