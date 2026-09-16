@@ -20,6 +20,7 @@ import { noteGameFinished } from '@/monetization/pacing';
 import { useLevelStore } from '@/store/useLevelStore';
 import { usePremiumStore } from '@/store/usePremiumStore';
 import { MIN_TOUCH_TARGET, useTheme, withAlpha } from '@/theme';
+import { useTabletColumn } from '@/theme/useTabletColumn';
 
 /** Levels offered in the picker. */
 const PICKER_SPAN = 24;
@@ -28,6 +29,7 @@ export default function Home() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { colors, spacing, radius } = useTheme();
+  const tabletColumn = useTabletColumn();
 
   const isPremium = usePremiumStore((s) => s.isPremium);
   const isReady = usePremiumStore((s) => s.isReady);
@@ -96,6 +98,8 @@ export default function Home() {
           paddingHorizontal: spacing.base,
           paddingBottom: spacing.xl,
           gap: spacing.base,
+        
+          ...tabletColumn,
         }}
         showsVerticalScrollIndicator={false}
       >
