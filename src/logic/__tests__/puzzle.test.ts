@@ -9,9 +9,13 @@ import {
   levelForIndex,
   solve,
   type Board,
+  type Colour,
 } from '../puzzle';
 
-const board = (rows: (string | null)[][]): Board => rows.map((r) => [...r]);
+// `Colour` is now the four codes rather than any string, so the fixture helper
+// takes them too -- a test board that could hold 'purple' was a test board the
+// palette could not colour.
+const board = (rows: (Colour | null)[][]): Board => rows.map((r) => [...r]);
 
 describe('shooting', () => {
   it('drops a bubble to the lowest free cell in its column', () => {

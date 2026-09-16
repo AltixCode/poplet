@@ -131,12 +131,19 @@ export default function Home() {
                       width: cellSize,
                       height: cellSize,
                       borderRadius: radius.full,
-                      backgroundColor: cell ? withAlpha(colors.accent, 0.85) : colors.surface,
-                      borderColor: colors.border,
+                      // Every bubble used to be drawn in `colors.accent`, so
+                      // all four colours were the same colour and the only
+                      // thing telling them apart was the code letter. In a game
+                      // whose entire mechanic is matching touching same-colour
+                      // bubbles, that is the mechanic missing.
+                      backgroundColor: cell ? colors.bubble[cell] : colors.surface,
+                      borderColor: cell ? colors.bubble[cell] : colors.border,
                     },
                   ]}
                 >
-                  <Text variant="caption">{cell ?? ''}</Text>
+                  <Text variant="caption" style={cell ? { color: colors.onBubble[cell] } : undefined}>
+                    {cell ?? ''}
+                  </Text>
                 </View>
               ))}
             </View>
