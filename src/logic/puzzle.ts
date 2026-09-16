@@ -12,7 +12,14 @@
  * Pure and dependency-free.
  */
 
-export type Colour = string;
+/**
+ * The four bubble colours.
+ *
+ * This was `string`, which let the board hold any value and — more to the point
+ * — let the UI index the palette with something the palette has no entry for.
+ * The palette is keyed by exactly these four, so the board must be too.
+ */
+export type Colour = 'r' | 'g' | 'b' | 'y';
 /** A grid, top row first. `null` is an empty cell. */
 export type Board = (Colour | null)[][];
 

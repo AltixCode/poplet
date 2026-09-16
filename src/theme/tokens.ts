@@ -69,7 +69,25 @@ export interface Palette {
   /** Inverted surface used for the primary CTA. */
   inverse: string;
   onInverse: string;
+  /**
+   * The four bubble colours, and the label that sits on each.
+   *
+   * These are a LIGHTNESS ladder, not four hues. A group of touching
+   * same-colour bubbles is the whole game, so the four must be tellable apart
+   * at a glance -- and contrast is luminance-only, which means four hues chosen
+   * at similar lightness are four colours that a contrast check, and a
+   * colour-blind player, read as identical. Ordered r < g < b < y by luminance,
+   * every pair therefore differs by at least the gap between neighbours.
+   *
+   * The code letter stays on the bubble: it is what makes the game playable
+   * without colour vision at all.
+   */
+  bubble: Record<BubbleCode, string>;
+  onBubble: Record<BubbleCode, string>;
 }
+
+/** The colour codes the puzzle logic uses. Kept here so the palette is total. */
+export type BubbleCode = 'r' | 'g' | 'b' | 'y';
 
 export const lightPalette: Palette = {
   background: '#F7F7F5',
@@ -88,6 +106,8 @@ export const lightPalette: Palette = {
   scrim: 'rgba(12,12,13,0.45)',
   inverse: '#0C0C0D',
   onInverse: '#FFFFFF',
+  bubble: { r: '#7E1028', g: '#116530', b: '#3370D3', y: '#B2910F' },
+  onBubble: { r: '#FFFFFF', g: '#FFFFFF', b: '#FFFFFF', y: '#000000' },
 };
 
 export const darkPalette: Palette = {
@@ -107,6 +127,8 @@ export const darkPalette: Palette = {
   scrim: 'rgba(0,0,0,0.6)',
   inverse: '#F4F4F2',
   onInverse: '#0C0C0D',
+  bubble: { r: '#A14955', g: '#319354', b: '#62A8FF', y: '#E9CF41' },
+  onBubble: { r: '#FFFFFF', g: '#000000', b: '#000000', y: '#000000' },
 };
 
 /**

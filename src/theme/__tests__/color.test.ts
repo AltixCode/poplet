@@ -87,3 +87,59 @@ describe('palette accessibility', () => {
     expect(contrastRatio(accent, on)).toBeGreaterThanOrEqual(4.5);
   });
 });
+
+describe('bubble colours', () => {
+  // Poplet is a colour-matching game: a group of touching SAME-COLOUR bubbles
+  // pops. Every bubble was drawn in `colors.accent`, so all four colours looked
+  // identical and the only thing telling them apart was the raw internal code
+  // ('r'/'g'/'b'/'y') printed inside. The core mechanic was unplayable, and a
+  // screenshot of it was about to go to the App Store.
+  const CODES = ['r', 'g', 'b', 'y'] as const;
+
+  for (const [name, palette] of [
+    ['light', lightPalette],
+    ['dark', darkPalette],
+  ] as const) {
+    describe(name, () => {
+      it('defines a fill and a label colour for every code', () => {
+        for (const code of CODES) {
+          expect(palette.bubble[code]).toBeDefined();
+          expect(palette.onBubble[code]).toBeDefined();
+        }
+      });
+
+      it('gives every pair of colours a distinguishable contrast', () => {
+        // Adjacent bubbles of different colours must be told apart at a glance.
+        // 1.4:1 is well below the text threshold but is what separates "two
+        // different colours" from "the same colour twice".
+        CODES.forEach((a, i) => {
+          CODES.slice(i + 1).forEach((b) => {
+            const ratio = contrastRatio(palette.bubble[a], palette.bubble[b]);
+            // Name the pair in the failure, so a regression says which two
+            // colours collapsed rather than just "expected >= 1.4".
+            expect({ pair: `${a}/${b}`, ok: ratio >= 1.4 }).toEqual({
+              pair: `${a}/${b}`,
+              ok: true,
+            });
+          });
+        });
+      });
+
+      it('keeps the label readable on its own bubble at AA', () => {
+        for (const code of CODES) {
+          expect(
+            contrastRatio(palette.onBubble[code], palette.bubble[code]),
+          ).toBeGreaterThanOrEqual(4.5);
+        }
+      });
+
+      it('separates every bubble from the board surface', () => {
+        for (const code of CODES) {
+          expect(
+            contrastRatio(palette.bubble[code], palette.surface),
+          ).toBeGreaterThanOrEqual(1.4);
+        }
+      });
+    });
+  }
+});
