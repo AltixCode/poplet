@@ -3,6 +3,7 @@ import React from 'react';
 import { Linking } from 'react-native';
 import type { PurchasesPackage } from 'react-native-purchases';
 
+import { FREE_LEVELS, TOTAL_LEVELS } from '@/logic/puzzle';
 import Paywall from '../paywall';
 import { testRouter } from './testRouter';
 import { renderWithProviders } from '@/components/__tests__/renderWithProviders';
@@ -138,6 +139,19 @@ describe('when the store has nothing to sell', () => {
     const { getByText, queryByText } = await renderWithProviders(<Paywall />);
     expect(getByText(t('loadingPrice'))).toBeTruthy();
     expect(queryByText(t('storeUnavailable'))).toBeNull();
+  });
+
+  // Ata's IAP review screenshot for this app showed "All {total} levels" and
+  // "The first {n} are free" -- the literal placeholders, in the one image
+  // Apple's reviewer sees of the purchase. `t()` was called with no values, so
+  // nothing substituted them. FREE_LEVELS and TOTAL_LEVELS both already
+  // existed; the paywall simply never passed them.
+  it('renders real numbers in the benefits, never a raw {placeholder}', async () => {
+    const { toJSON } = await renderWithProviders(<Paywall />);
+    const text = JSON.stringify(toJSON());
+    expect(text).not.toMatch(/\{total\}|\{n\}/);
+    expect(text).toContain(String(TOTAL_LEVELS));
+    expect(text).toContain(String(FREE_LEVELS));
   });
 });
 

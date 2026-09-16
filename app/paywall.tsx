@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button, Text } from '@/components/ui';
 import { t } from '@/i18n';
+import { FREE_LEVELS, TOTAL_LEVELS } from '@/logic/puzzle';
 import { PRIVACY_POLICY_URL, TERMS_URL } from '@/monetization/config';
 import { usePremiumStore } from '@/store/usePremiumStore';
 import { useTheme } from '@/theme';
@@ -35,7 +36,15 @@ export default function Paywall() {
    * edit in `i18n` rather than a component change. Computed per render, not at
    * module load, so it follows the active locale.
    */
-  const benefits = BENEFIT_KEYS.filter((b) => t(b.title).trim().length > 0);
+  // The counts have to be PASSED, not just present in the string.
+  //
+  // These titles interpolate: 'All {total} levels', 'The first {n} are free'.
+  // `t(key)` with no values leaves the braces in place, and this app's IAP
+  // review screenshot went to Apple reading "All {total} levels" -- the one
+  // image a reviewer sees of the purchase. FREE_LEVELS and TOTAL_LEVELS
+  // already existed; nothing was ever handed to `t()`.
+  const counts = { total: TOTAL_LEVELS, n: FREE_LEVELS };
+  const benefits = BENEFIT_KEYS.filter((b) => t(b.title, counts).trim().length > 0);
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { colors, spacing, radius } = useTheme();
@@ -104,9 +113,9 @@ export default function Paywall() {
                 ✓
               </Text>
               <View style={{ flex: 1 }}>
-                <Text variant="bodyStrong">{t(benefit.title)}</Text>
+                <Text variant="bodyStrong">{t(benefit.title, counts)}</Text>
                 <Text variant="caption" tone="muted" style={{ marginTop: 2 }}>
-                  {t(benefit.desc)}
+                  {t(benefit.desc, counts)}
                 </Text>
               </View>
             </View>
