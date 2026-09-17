@@ -9,6 +9,7 @@ import { FREE_LEVELS, TOTAL_LEVELS } from '@/logic/puzzle';
 import { PRIVACY_POLICY_URL, TERMS_URL } from '@/monetization/config';
 import { usePremiumStore } from '@/store/usePremiumStore';
 import { useTheme } from '@/theme';
+import { useTabletColumn } from '../src/theme/useTabletColumn';
 
 /**
  * The one purchase this app sells: a lifetime non-consumable that removes the ads and unlocks
@@ -46,6 +47,7 @@ export default function Paywall() {
   const counts = { total: TOTAL_LEVELS, n: FREE_LEVELS };
   const benefits = BENEFIT_KEYS.filter((b) => t(b.title, counts).trim().length > 0);
   const router = useRouter();
+  const tabletColumn = useTabletColumn(640);
   const insets = useSafeAreaInsets();
   const { colors, spacing, radius } = useTheme();
 
@@ -85,7 +87,7 @@ export default function Paywall() {
         </Pressable>
       </View>
 
-      <ScrollView contentContainerStyle={{ padding: spacing.xl, paddingBottom: spacing['3xl'] }}>
+      <ScrollView contentContainerStyle={{ padding: spacing.xl, paddingBottom: spacing['3xl'], ...tabletColumn, flexGrow: 1, justifyContent: 'center' }}>
         <Text variant="display">{t('paywallTitle')}</Text>
 
         <View
