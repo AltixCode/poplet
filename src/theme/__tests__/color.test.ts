@@ -1,5 +1,6 @@
 import { contrastRatio, luminance, mix, readableTextOn, withAlpha } from '../color';
 import { darkPalette, lightPalette } from '../tokens';
+import { darkPalette, lightPalette } from '../tokens';
 
 describe('mix', () => {
   it('returns the background at 0 and the colour at 1', () => {
@@ -88,94 +89,32 @@ describe('palette accessibility', () => {
   });
 });
 
-describe('bubble colours', () => {
-  // Poplet is a colour-matching game: a group of touching SAME-COLOUR bubbles
-  // pops. Every bubble was drawn in `colors.accent`, so all four colours looked
-  // identical and the only thing telling them apart was the raw internal code
-  // ('r'/'g'/'b'/'y') printed inside. The core mechanic was unplayable, and a
-  // screenshot of it was about to go to the App Store.
-  const CODES = ['r', 'g', 'b', 'y'] as const;
-
-  for (const [name, palette] of [
-    ['light', lightPalette],
-    ['dark', darkPalette],
-  ] as const) {
-    describe(name, () => {
-      it('defines a fill and a label colour for every code', () => {
-        for (const code of CODES) {
-          expect(palette.bubble[code]).toBeDefined();
-          expect(palette.onBubble[code]).toBeDefined();
-        }
-      });
-
-      it('gives every pair of colours a distinguishable contrast', () => {
-        // Adjacent bubbles of different colours must be told apart at a glance.
-        // 1.4:1 is well below the text threshold but is what separates "two
-        // different colours" from "the same colour twice".
-        CODES.forEach((a, i) => {
-          CODES.slice(i + 1).forEach((b) => {
-            const ratio = contrastRatio(palette.bubble[a], palette.bubble[b]);
-            // Name the pair in the failure, so a regression says which two
-            // colours collapsed rather than just "expected >= 1.4".
-            expect({ pair: `${a}/${b}`, ok: ratio >= 1.4 }).toEqual({
-              pair: `${a}/${b}`,
-              ok: true,
-            });
-          });
-        });
-      });
-
-      it('keeps the label readable on its own bubble at AA', () => {
-        for (const code of CODES) {
-          expect(
-            contrastRatio(palette.onBubble[code], palette.bubble[code]),
-          ).toBeGreaterThanOrEqual(4.5);
-        }
-      });
-
-      it('separates every bubble from the board surface', () => {
-        for (const code of CODES) {
-          expect(
-            contrastRatio(palette.bubble[code], palette.surface),
-          ).toBeGreaterThanOrEqual(1.4);
-        }
-      });
-    });
-  }
-});
-
-describe('the board is visible', () => {
+describe('a component boundary can be seen', () => {
   /**
-   * An empty cell IS the board -- before the first move, every cell is empty,
-   * so if the empty state cannot be seen there is nothing on screen at all.
+   * WCAG AA asks 3:1 for the boundary of a non-text UI component. A card, a
+   * board cell and a tile are all exactly that, and in this template they are
+   * drawn with `borderStrong`.
    *
-   * It used to be drawn in `border`, which is 1.29:1 against the dark
-   * background. The screenshot live on the App Store shows a five-by-five grid
-   * with 76% of the frame indistinguishable from its own background: an
-   * accurate picture of an unreadable app.
+   * This test exists because the portfolio shipped without it. `surface` sits
+   * about 1.1:1 against `background` and `border` about 1.3:1, so a board drawn
+   * with either is invisible in dark mode -- and two live App Store screenshots
+   * showed grids with more than 70% of the frame indistinguishable from its own
+   * background. The screenshots were accurate; the apps were unreadable.
    *
-   * WCAG AA asks 3:1 for the boundary of a non-text UI component, and that is
-   * exactly what a board cell is.
+   * The dark background is substituted per app, so this assertion is the only
+   * thing that holds the guarantee once the template has been copied.
    */
   const MIN_COMPONENT_CONTRAST = 3;
 
-  it('draws an empty cell against the dark background at 3:1 or better', () => {
+  it('keeps borderStrong at 3:1 against the dark background', () => {
     expect(
       contrastRatio(darkPalette.borderStrong, darkPalette.background)
     ).toBeGreaterThanOrEqual(MIN_COMPONENT_CONTRAST);
   });
 
-  it('draws an empty cell against the light background at 3:1 or better', () => {
+  it('keeps borderStrong at 3:1 against the light background', () => {
     expect(
       contrastRatio(lightPalette.borderStrong, lightPalette.background)
     ).toBeGreaterThanOrEqual(MIN_COMPONENT_CONTRAST);
-  });
-
-  it('keeps every filled bubble distinguishable from the board too', () => {
-    for (const code of ['r', 'g', 'b', 'y'] as const) {
-      expect(
-        contrastRatio(darkPalette.bubble[code], darkPalette.background)
-      ).toBeGreaterThanOrEqual(MIN_COMPONENT_CONTRAST);
-    }
   });
 });

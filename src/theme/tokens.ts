@@ -69,25 +69,7 @@ export interface Palette {
   /** Inverted surface used for the primary CTA. */
   inverse: string;
   onInverse: string;
-  /**
-   * The four bubble colours, and the label that sits on each.
-   *
-   * These are a LIGHTNESS ladder, not four hues. A group of touching
-   * same-colour bubbles is the whole game, so the four must be tellable apart
-   * at a glance -- and contrast is luminance-only, which means four hues chosen
-   * at similar lightness are four colours that a contrast check, and a
-   * colour-blind player, read as identical. Ordered r < g < b < y by luminance,
-   * every pair therefore differs by at least the gap between neighbours.
-   *
-   * The code letter stays on the bubble: it is what makes the game playable
-   * without colour vision at all.
-   */
-  bubble: Record<BubbleCode, string>;
-  onBubble: Record<BubbleCode, string>;
 }
-
-/** The colour codes the puzzle logic uses. Kept here so the palette is total. */
-export type BubbleCode = 'r' | 'g' | 'b' | 'y';
 
 export const lightPalette: Palette = {
   background: '#F7F7F5',
@@ -97,9 +79,9 @@ export const lightPalette: Palette = {
   textMuted: '#5F5F66',
   textFaint: '#85858D',
   border: '#E6E6E1',
-  // 3.16:1 against the light background. An empty board cell is drawn with
-  // this, and a UI component boundary needs 3:1 under WCAG AA to be seen.
-  borderStrong: '#8C8C84',
+  // 3.24:1 against the light background. Use this, not `border`, for the
+  // boundary of anything a person has to SEE -- a card, a board cell, a tile.
+  borderStrong: '#8A8A82',
   accent: '#7E22CE',
   onAccent: '#FFFFFF',
   success: '#059669',
@@ -108,8 +90,6 @@ export const lightPalette: Palette = {
   scrim: 'rgba(12,12,13,0.45)',
   inverse: '#0C0C0D',
   onInverse: '#FFFFFF',
-  bubble: { r: '#7E1028', g: '#116530', b: '#3370D3', y: '#B2910F' },
-  onBubble: { r: '#FFFFFF', g: '#FFFFFF', b: '#FFFFFF', y: '#000000' },
 };
 
 export const darkPalette: Palette = {
@@ -120,11 +100,18 @@ export const darkPalette: Palette = {
   textMuted: '#A3A3AA',
   textFaint: '#6E6E76',
   border: '#26262A',
-  // 3.31:1 against the dark background. It was #3A3A40, which is 1.72:1 --
-  // and the empty board cells were drawn in `border` at 1.29:1, so the grid
-  // was invisible. The live App Store screenshot shows a 5x5 board a
-  // customer cannot see.
-  borderStrong: '#6B6078',
+  // 3.49:1 against the lightest dark background any app in this portfolio
+  // generates, and 3.65:1 against the darkest. It was #3A3A40, which is
+  // 1.73:1 -- and `border` is 1.3:1 and `surface` about 1.1:1, so a board
+  // drawn with either was invisible in dark mode. That shipped: two live App
+  // Store screenshots showed grids with 70%+ of the frame indistinguishable
+  // from its own background.
+  //
+  // `#100A18` is substituted per app, so a fixed value cannot GUARANTEE 3:1.
+  // The test in src/theme/__tests__/color.test.ts is what guarantees it: it
+  // is generated into every app and fails there if that app's background
+  // makes this value insufficient.
+  borderStrong: '#6A6A72',
   accent: '#C084FC',
   onAccent: '#0C0C0D',
   success: '#10B981',
@@ -133,8 +120,6 @@ export const darkPalette: Palette = {
   scrim: 'rgba(0,0,0,0.6)',
   inverse: '#F4F4F2',
   onInverse: '#0C0C0D',
-  bubble: { r: '#A14955', g: '#319354', b: '#62A8FF', y: '#E9CF41' },
-  onBubble: { r: '#FFFFFF', g: '#000000', b: '#000000', y: '#000000' },
 };
 
 /**
@@ -202,4 +187,3 @@ export function scaleTypography(isTablet: boolean): ScaledTypography {
     ]),
   ) as ScaledTypography;
 }
-
