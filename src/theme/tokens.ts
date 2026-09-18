@@ -97,7 +97,9 @@ export const lightPalette: Palette = {
   textMuted: '#5F5F66',
   textFaint: '#85858D',
   border: '#E6E6E1',
-  borderStrong: '#CFCFC8',
+  // 3.16:1 against the light background. An empty board cell is drawn with
+  // this, and a UI component boundary needs 3:1 under WCAG AA to be seen.
+  borderStrong: '#8C8C84',
   accent: '#7E22CE',
   onAccent: '#FFFFFF',
   success: '#059669',
@@ -118,7 +120,11 @@ export const darkPalette: Palette = {
   textMuted: '#A3A3AA',
   textFaint: '#6E6E76',
   border: '#26262A',
-  borderStrong: '#3A3A40',
+  // 3.31:1 against the dark background. It was #3A3A40, which is 1.72:1 --
+  // and the empty board cells were drawn in `border` at 1.29:1, so the grid
+  // was invisible. The live App Store screenshot shows a 5x5 board a
+  // customer cannot see.
+  borderStrong: '#6B6078',
   accent: '#C084FC',
   onAccent: '#0C0C0D',
   success: '#10B981',

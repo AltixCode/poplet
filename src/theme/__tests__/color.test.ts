@@ -143,3 +143,39 @@ describe('bubble colours', () => {
     });
   }
 });
+
+describe('the board is visible', () => {
+  /**
+   * An empty cell IS the board -- before the first move, every cell is empty,
+   * so if the empty state cannot be seen there is nothing on screen at all.
+   *
+   * It used to be drawn in `border`, which is 1.29:1 against the dark
+   * background. The screenshot live on the App Store shows a five-by-five grid
+   * with 76% of the frame indistinguishable from its own background: an
+   * accurate picture of an unreadable app.
+   *
+   * WCAG AA asks 3:1 for the boundary of a non-text UI component, and that is
+   * exactly what a board cell is.
+   */
+  const MIN_COMPONENT_CONTRAST = 3;
+
+  it('draws an empty cell against the dark background at 3:1 or better', () => {
+    expect(
+      contrastRatio(darkPalette.borderStrong, darkPalette.background)
+    ).toBeGreaterThanOrEqual(MIN_COMPONENT_CONTRAST);
+  });
+
+  it('draws an empty cell against the light background at 3:1 or better', () => {
+    expect(
+      contrastRatio(lightPalette.borderStrong, lightPalette.background)
+    ).toBeGreaterThanOrEqual(MIN_COMPONENT_CONTRAST);
+  });
+
+  it('keeps every filled bubble distinguishable from the board too', () => {
+    for (const code of ['r', 'g', 'b', 'y'] as const) {
+      expect(
+        contrastRatio(darkPalette.bubble[code], darkPalette.background)
+      ).toBeGreaterThanOrEqual(MIN_COMPONENT_CONTRAST);
+    }
+  });
+});

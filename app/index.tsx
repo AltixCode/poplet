@@ -142,7 +142,11 @@ export default function Home() {
                       // whose entire mechanic is matching touching same-colour
                       // bubbles, that is the mechanic missing.
                       backgroundColor: cell ? colors.bubble[cell] : colors.surface,
-                      borderColor: cell ? colors.bubble[cell] : colors.border,
+                      // An EMPTY cell is the board: it has to be visible on its own.
+                      // `border` is 1.29:1 against the background in the dark theme,
+                      // which is why the live iPad screenshot reads as a blank frame
+                      // with 76% of it indistinguishable from the background.
+                      borderColor: cell ? colors.bubble[cell] : colors.borderStrong,
                     },
                   ]}
                 >
