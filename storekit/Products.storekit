@@ -1,0 +1,35 @@
+{
+  "identifier": "48F55A56-C191-445A-95B0-FFA5751A14C0",
+  "nonRenewingSubscriptions": [],
+  "products": [
+    {
+      "displayPrice": "4.99",
+      "familyShareable": false,
+      "internalID": "92A2AF00-9564-4773-B831-1763E1F732DC",
+      "localizations": [
+        {
+          "description": "poplet remove ads lifetime unlock",
+          "displayName": "poplet remove ads",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.altixcode.poplet.removeads",
+      "referenceName": "poplet remove ads",
+      "type": "NonConsumable"
+    }
+  ],
+  "settings": {
+    "_applicationInternalID": "",
+    "_developerTeamID": "",
+    "_failTransactionsEnabled": false,
+    "_lastSynchronizedDate": 0,
+    "_locale": "en_US",
+    "_storefront": "USA",
+    "_storeKitErrors": []
+  },
+  "subscriptionGroups": [],
+  "version": {
+    "major": 4,
+    "minor": 0
+  }
+}
