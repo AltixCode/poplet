@@ -5,23 +5,38 @@
  * platform UI font (SF Pro / Roboto) rather than a webfont: sharpest at small sizes, correct
  * optical sizing, and zero bundle weight — which matters for an app opened for a minute a day.
  */
-import { Platform } from 'react-native';
+import { Platform } from "react-native";
 
 /** 4pt base grid. Every margin and padding in the app comes from here. */
 export const spacing = {
-  xs: 4, sm: 8, md: 12, base: 16, lg: 20, xl: 24,
-  '2xl': 32, '3xl': 40, '4xl': 48, '5xl': 64,
+  xs: 4,
+  sm: 8,
+  md: 12,
+  base: 16,
+  lg: 20,
+  xl: 24,
+  "2xl": 32,
+  "3xl": 40,
+  "4xl": 48,
+  "5xl": 64,
 } as const;
 
-export const radius = { xs: 4, sm: 8, md: 12, lg: 16, xl: 22, full: 999 } as const;
+export const radius = {
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 22,
+  full: 999,
+} as const;
 
 /** Minimum interactive size, per Apple HIG (44pt) and Material (48dp). */
 export const MIN_TOUCH_TARGET = 44;
 
 export const fontFamily = Platform.select({
-  ios: { regular: 'System', mono: 'Menlo' },
-  android: { regular: 'sans-serif', mono: 'monospace' },
-  default: { regular: 'System', mono: 'monospace' },
+  ios: { regular: "System", mono: "Menlo" },
+  android: { regular: "sans-serif", mono: "monospace" },
+  default: { regular: "System", mono: "monospace" },
 }) as { regular: string; mono: string };
 
 /**
@@ -29,16 +44,61 @@ export const fontFamily = Platform.select({
  * round inconsistently across platforms and break vertical rhythm.
  */
 export const typography = {
-  display: { fontSize: 34, lineHeight: 40, fontWeight: '700', letterSpacing: -0.8 },
-  title: { fontSize: 26, lineHeight: 32, fontWeight: '700', letterSpacing: -0.5 },
-  heading: { fontSize: 20, lineHeight: 26, fontWeight: '600', letterSpacing: -0.3 },
-  body: { fontSize: 16, lineHeight: 24, fontWeight: '400', letterSpacing: -0.1 },
-  bodyStrong: { fontSize: 16, lineHeight: 24, fontWeight: '600', letterSpacing: -0.1 },
-  callout: { fontSize: 15, lineHeight: 21, fontWeight: '500', letterSpacing: -0.1 },
-  caption: { fontSize: 13, lineHeight: 18, fontWeight: '500', letterSpacing: 0 },
-  micro: { fontSize: 11, lineHeight: 14, fontWeight: '600', letterSpacing: 0.2 },
+  display: {
+    fontSize: 34,
+    lineHeight: 40,
+    fontWeight: "700",
+    letterSpacing: -0.8,
+  },
+  title: {
+    fontSize: 26,
+    lineHeight: 32,
+    fontWeight: "700",
+    letterSpacing: -0.5,
+  },
+  heading: {
+    fontSize: 20,
+    lineHeight: 26,
+    fontWeight: "600",
+    letterSpacing: -0.3,
+  },
+  body: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: "400",
+    letterSpacing: -0.1,
+  },
+  bodyStrong: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: "600",
+    letterSpacing: -0.1,
+  },
+  callout: {
+    fontSize: 15,
+    lineHeight: 21,
+    fontWeight: "500",
+    letterSpacing: -0.1,
+  },
+  caption: {
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: "500",
+    letterSpacing: 0,
+  },
+  micro: {
+    fontSize: 11,
+    lineHeight: 14,
+    fontWeight: "600",
+    letterSpacing: 0.2,
+  },
   /** Tabular figures keep counters and timers from jittering as they change. */
-  numeric: { fontSize: 32, lineHeight: 36, fontWeight: '700', letterSpacing: -1 },
+  numeric: {
+    fontSize: 32,
+    lineHeight: 36,
+    fontWeight: "700",
+    letterSpacing: -1,
+  },
 } as const;
 
 export interface Palette {
@@ -69,37 +129,63 @@ export interface Palette {
   /** Inverted surface used for the primary CTA. */
   inverse: string;
   onInverse: string;
+  /**
+   * The four bubble colours, and the label that sits on each.
+   *
+   * These are a LIGHTNESS ladder, not four hues. A group of touching
+   * same-colour bubbles is the whole game, so the four must be tellable apart
+   * at a glance -- and contrast is luminance-only, which means four hues chosen
+   * at similar lightness are four colours that a contrast check, and a
+   * colour-blind player, read as identical. Ordered r < g < b < y by luminance,
+   * every pair therefore differs by at least the gap between neighbours.
+   *
+   * The code letter stays on the bubble: it is what makes the game playable
+   * without colour vision at all.
+   *
+   * NOTE: this is Poplet-specific, not part of the shared `_template` Palette
+   * shape -- a template sync once overwrote this file wholesale and silently
+   * deleted these two fields while `app/index.tsx` still indexed into them,
+   * crashing the Home screen on every launch. Re-adding a field here must not
+   * be re-removed by a future blind sync of tokens.ts.
+   */
+  bubble: Record<BubbleCode, string>;
+  onBubble: Record<BubbleCode, string>;
 }
 
+/** The colour codes the puzzle logic uses. Kept here so the palette is total. */
+export type BubbleCode = "r" | "g" | "b" | "y";
+
 export const lightPalette: Palette = {
-  background: '#F7F7F5',
-  surface: '#FFFFFF',
-  surfaceAlt: '#F1F1EE',
-  text: '#0C0C0D',
-  textMuted: '#5F5F66',
-  textFaint: '#85858D',
-  border: '#E6E6E1',
+  background: "#F7F7F5",
+  surface: "#FFFFFF",
+  surfaceAlt: "#F1F1EE",
+  text: "#0C0C0D",
+  textMuted: "#5F5F66",
+  textFaint: "#85858D",
+  border: "#E6E6E1",
   // 3.24:1 against the light background. Use this, not `border`, for the
   // boundary of anything a person has to SEE -- a card, a board cell, a tile.
-  borderStrong: '#8A8A82',
-  accent: '#7E22CE',
-  onAccent: '#FFFFFF',
-  success: '#059669',
-  danger: '#DC2626',
-  onDanger: '#FFFFFF',
-  scrim: 'rgba(12,12,13,0.45)',
-  inverse: '#0C0C0D',
-  onInverse: '#FFFFFF',
+  borderStrong: "#8A8A82",
+  accent: "#7E22CE",
+  onAccent: "#FFFFFF",
+  success: "#059669",
+  danger: "#DC2626",
+  onDanger: "#FFFFFF",
+  scrim: "rgba(12,12,13,0.45)",
+  inverse: "#0C0C0D",
+  onInverse: "#FFFFFF",
+  bubble: { r: "#7E1028", g: "#116530", b: "#3370D3", y: "#B2910F" },
+  onBubble: { r: "#FFFFFF", g: "#FFFFFF", b: "#FFFFFF", y: "#000000" },
 };
 
 export const darkPalette: Palette = {
-  background: '#100A18',
-  surface: '#1A1124',
-  surfaceAlt: '#241831',
-  text: '#F4F4F2',
-  textMuted: '#A3A3AA',
-  textFaint: '#6E6E76',
-  border: '#26262A',
+  background: "#100A18",
+  surface: "#1A1124",
+  surfaceAlt: "#241831",
+  text: "#F4F4F2",
+  textMuted: "#A3A3AA",
+  textFaint: "#6E6E76",
+  border: "#26262A",
   // 3.49:1 against the lightest dark background any app in this portfolio
   // generates, and 3.65:1 against the darkest. It was #3A3A40, which is
   // 1.73:1 -- and `border` is 1.3:1 and `surface` about 1.1:1, so a board
@@ -111,15 +197,17 @@ export const darkPalette: Palette = {
   // The test in src/theme/__tests__/color.test.ts is what guarantees it: it
   // is generated into every app and fails there if that app's background
   // makes this value insufficient.
-  borderStrong: '#6A6A72',
-  accent: '#C084FC',
-  onAccent: '#0C0C0D',
-  success: '#10B981',
-  danger: '#F87171',
-  onDanger: '#1A0606',
-  scrim: 'rgba(0,0,0,0.6)',
-  inverse: '#F4F4F2',
-  onInverse: '#0C0C0D',
+  borderStrong: "#6A6A72",
+  accent: "#C084FC",
+  onAccent: "#0C0C0D",
+  success: "#10B981",
+  danger: "#F87171",
+  onDanger: "#1A0606",
+  scrim: "rgba(0,0,0,0.6)",
+  inverse: "#F4F4F2",
+  onInverse: "#0C0C0D",
+  bubble: { r: "#A14955", g: "#319354", b: "#62A8FF", y: "#E9CF41" },
+  onBubble: { r: "#FFFFFF", g: "#000000", b: "#000000", y: "#000000" },
 };
 
 /**
@@ -127,18 +215,36 @@ export const darkPalette: Palette = {
  * leaving element should not hold the user up.
  */
 export const motion = {
-  instant: 90, fast: 150, base: 220, slow: 320,
+  instant: 90,
+  fast: 150,
+  base: 220,
+  slow: 320,
   spring: { damping: 18, stiffness: 220, mass: 0.9 },
   springBouncy: { damping: 12, stiffness: 260, mass: 0.8 },
 } as const;
 
 export const elevation = {
-  card: { shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 12, shadowOffset: { width: 0, height: 4 }, elevation: 2 },
-  sheet: { shadowColor: '#000', shadowOpacity: 0.14, shadowRadius: 28, shadowOffset: { width: 0, height: -6 }, elevation: 12 },
+  card: {
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
+  },
+  sheet: {
+    shadowColor: "#000",
+    shadowOpacity: 0.14,
+    shadowRadius: 28,
+    shadowOffset: { width: 0, height: -6 },
+    elevation: 12,
+  },
 } as const;
 
 export type ScaledSpacing = Record<keyof typeof spacing, number>;
-export type ScaledTypography = Record<keyof typeof typography, (typeof typography)[keyof typeof typography]>;
+export type ScaledTypography = Record<
+  keyof typeof typography,
+  (typeof typography)[keyof typeof typography]
+>;
 
 /**
  * A tablet is not a big phone, and the tokens were written for a phone.
@@ -166,7 +272,10 @@ const TABLET_TYPE_SCALE = 1.15;
 export function scaleSpacing(isTablet: boolean): ScaledSpacing {
   if (!isTablet) return spacing;
   return Object.fromEntries(
-    Object.entries(spacing).map(([key, value]) => [key, Math.round(value * TABLET_SPACE_SCALE)]),
+    Object.entries(spacing).map(([key, value]) => [
+      key,
+      Math.round(value * TABLET_SPACE_SCALE),
+    ]),
   ) as ScaledSpacing;
 }
 
@@ -182,7 +291,9 @@ export function scaleTypography(isTablet: boolean): ScaledTypography {
       ((scaledFontSize) => ({
         ...style,
         fontSize: scaledFontSize,
-        lineHeight: Math.round(scaledFontSize * (style.lineHeight / style.fontSize)),
+        lineHeight: Math.round(
+          scaledFontSize * (style.lineHeight / style.fontSize),
+        ),
       }))(Math.round(style.fontSize * TABLET_TYPE_SCALE)),
     ]),
   ) as ScaledTypography;
