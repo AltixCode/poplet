@@ -19,7 +19,7 @@
  * — let the UI index the palette with something the palette has no entry for.
  * The palette is keyed by exactly these four, so the board must be too.
  */
-export type Colour = 'r' | 'g' | 'b' | 'y';
+export type Colour = "r" | "g" | "b" | "y";
 /** A grid, top row first. `null` is an empty cell. */
 export type Board = (Colour | null)[][];
 
@@ -32,7 +32,7 @@ export const FREE_LEVELS = 12;
 /** Total levels. */
 export const TOTAL_LEVELS = 120;
 
-const COLOURS: Colour[] = ['r', 'g', 'b', 'y'];
+const COLOURS: Colour[] = ["r", "g", "b", "y"];
 /** A group of at least this many touching same-colour bubbles pops. */
 const POP_AT = 3;
 
@@ -126,7 +126,8 @@ export function isCleared(board: Board): boolean {
   return board.every((row) => row.every((cell) => cell === null));
 }
 
-const key = (board: Board): string => board.map((r) => r.map((c) => c ?? '.').join('')).join('/');
+const key = (board: Board): string =>
+  board.map((r) => r.map((c) => c ?? ".").join("")).join("/");
 
 /**
  * The first winning sequence of columns, or null.
@@ -134,8 +135,16 @@ const key = (board: Board): string => board.map((r) => r.map((c) => c ?? '.').jo
  * Exhaustive over columns to the shot limit. With five columns and at most four
  * shots that is 625 sequences — small enough to be certain rather than hopeful.
  */
-export function solve(board: Board, shots: readonly Colour[], limit: number): number[] | null {
-  const search = (current: Board, index: number, path: number[]): number[] | null => {
+export function solve(
+  board: Board,
+  shots: readonly Colour[],
+  limit: number,
+): number[] | null {
+  const search = (
+    current: Board,
+    index: number,
+    path: number[],
+  ): number[] | null => {
     if (isCleared(current)) return path;
     if (index >= limit || index >= shots.length) return null;
     for (let column = 0; column < widthOf(current); column += 1) {
@@ -152,7 +161,11 @@ export function solve(board: Board, shots: readonly Colour[], limit: number): nu
 }
 
 /** How many distinct shot sequences clear the board. The uniqueness proof. */
-export function countSolutions(board: Board, shots: readonly Colour[], limit: number): number {
+export function countSolutions(
+  board: Board,
+  shots: readonly Colour[],
+  limit: number,
+): number {
   let total = 0;
   const search = (current: Board, index: number): void => {
     // Two solutions is already enough to reject a level, so stop counting.
@@ -178,8 +191,26 @@ export interface Level {
   shots: Colour[];
 }
 
+/**
+ * Combines `seed` and `salt` into one well-mixed 32-bit value.
+ *
+ * `seed` and `salt` are both small integers here (a level index and an
+ * attempt counter up to a few hundred), so they must be spread across the
+ * full 32-bit range BEFORE combining. `seed ^ (salt + 0x9e3779b9)` does not:
+ * adding a small `salt` to that constant only ever changes its low ~10 bits,
+ * and XORing in a small `seed` only touches a similarly narrow band, so the
+ * combined value carries almost no entropy — two different (seed, salt)
+ * pairs collide onto the identical pre-mix value constantly (e.g. seed 0 with
+ * salt 59 landed on the exact same value as seed 4 with salt 55). The
+ * avalanche below cannot recover entropy that was never in its input, so
+ * `generateLevel` kept finding its first "unique solution" candidate from the
+ * same underlying value for many different level indices — every level had
+ * the same exact pattern. Each input is multiplied by its own large odd
+ * constant first, which spreads a small integer across every bit before the
+ * two are combined.
+ */
 function hash(seed: number, salt: number): number {
-  let h = (seed ^ (salt + 0x9e3779b9)) >>> 0;
+  let h = (Math.imul(seed, 0x2545f491) ^ Math.imul(salt, 0x9e3779b9)) >>> 0;
   h = Math.imul(h ^ (h >>> 16), 0x85ebca6b) >>> 0;
   h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35) >>> 0;
   return (h ^ (h >>> 16)) >>> 0;
@@ -193,7 +224,9 @@ function hash(seed: number, salt: number): number {
  * uniqueness check then rejects anything with a second.
  */
 function candidate(seed: number, shotCount: number): Level | null {
-  const board: Board = Array.from({ length: ROWS }, () => Array.from({ length: COLUMNS }, () => null));
+  const board: Board = Array.from({ length: ROWS }, () =>
+    Array.from({ length: COLUMNS }, () => null),
+  );
   const shots: Colour[] = [];
 
   // Seed the board with groups that are one bubble short of popping.
@@ -234,10 +267,12 @@ export function generateLevel(seed: number): Level {
   // Nothing in 400 attempts. Rather than ship a level whose property is
   // unproven, fall back to the smallest board that is provably unique: a single
   // shot completing one group.
-  const board: Board = Array.from({ length: ROWS }, () => Array.from({ length: COLUMNS }, () => null));
-  board[ROWS - 1]![0] = 'r';
-  board[ROWS - 1]![1] = 'r';
-  return { index: seed, board, shots: ['r'] };
+  const board: Board = Array.from({ length: ROWS }, () =>
+    Array.from({ length: COLUMNS }, () => null),
+  );
+  board[ROWS - 1]![0] = "r";
+  board[ROWS - 1]![1] = "r";
+  return { index: seed, board, shots: ["r"] };
 }
 
 export function levelForIndex(index: number): Level {

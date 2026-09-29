@@ -85,6 +85,9 @@ export const translations = {
     levelLocked: 'Level {n} is part of the one-time unlock',
     lockedHint: 'The first {n} levels are free. The unlock opens all {total}.',
     columnLabel: 'Shoot column {n}',
+    howToPlayTitle: 'How to play',
+    howToPlayCta: 'How to play',
+    howToPlayBody: 'Each column has a shooter. Pick a column to fire your next bubble into it — the colour queued up is shown above the board. Three or more touching bubbles of the same colour pop. Every level has a fixed number of shots and exactly one order that clears it, so there is always a way through — you just have to find it.',
   },
   es: {
     appName: 'Poplet',
@@ -149,6 +152,9 @@ export const translations = {
     levelLocked: 'El nivel {n} está en la compra única',
     lockedHint: 'Los primeros {n} niveles son gratis. La compra abre los {total}.',
     columnLabel: 'Disparar a la columna {n}',
+    howToPlayTitle: 'Cómo jugar',
+    howToPlayCta: 'Cómo jugar',
+    howToPlayBody: 'Cada columna tiene un disparador. Elige una columna para lanzar tu próxima burbuja — el color en turno se muestra sobre el tablero. Tres o más burbujas del mismo color que se toquen revientan. Cada nivel tiene un número fijo de disparos y un único orden que lo resuelve, así que siempre hay una solución — solo tienes que encontrarla.',
   },
   fr: {
     appName: 'Poplet',
@@ -213,6 +219,9 @@ export const translations = {
     levelLocked: 'Le niveau {n} fait partie de l’achat unique',
     lockedHint: 'Les {n} premiers niveaux sont gratuits. L’achat ouvre les {total}.',
     columnLabel: 'Tirer colonne {n}',
+    howToPlayTitle: 'Comment jouer',
+    howToPlayCta: 'Comment jouer',
+    howToPlayBody: 'Chaque colonne a son propre tireur. Choisissez une colonne pour y envoyer votre prochaine bulle — la couleur en attente est indiquée au-dessus de la grille. Trois bulles de même couleur qui se touchent, ou plus, explosent. Chaque niveau dispose d\'un nombre fixe de tirs et d\'un seul ordre qui le résout, il y a donc toujours une solution — à vous de la trouver.',
   },
   de: {
     appName: 'Poplet',
@@ -277,6 +286,9 @@ export const translations = {
     levelLocked: 'Level {n} gehört zum einmaligen Kauf',
     lockedHint: 'Die ersten {n} Level sind gratis. Der Kauf öffnet alle {total}.',
     columnLabel: 'Spalte {n} beschießen',
+    howToPlayTitle: 'Spielanleitung',
+    howToPlayCta: 'Spielanleitung',
+    howToPlayBody: 'Jede Spalte hat einen eigenen Schützen. Wählen Sie eine Spalte, um die nächste Blase dort abzuschießen — die anstehende Farbe wird über dem Feld angezeigt. Drei oder mehr berührende Blasen derselben Farbe platzen. Jedes Level hat eine feste Anzahl Schüsse und genau eine Reihenfolge, die es löst — es gibt also immer einen Weg, Sie müssen ihn nur finden.',
   },
   ru: {
     appName: 'Poplet',
@@ -341,6 +353,9 @@ export const translations = {
     levelLocked: 'Уровень {n} входит в разовую покупку',
     lockedHint: 'Первые {n} уровней бесплатны. Покупка открывает все {total}.',
     columnLabel: 'Выстрел в столбец {n}',
+    howToPlayTitle: 'Как играть',
+    howToPlayCta: 'Как играть',
+    howToPlayBody: 'У каждого столбца есть свой стрелок. Выберите столбец, чтобы выпустить туда следующий шарик — цвет следующего выстрела показан над полем. Три или более соприкасающихся шариков одного цвета лопаются. У каждого уровня фиксированное число выстрелов и ровно один порядок, который его решает — решение есть всегда, нужно только его найти.',
   },
   zh: {
     appName: 'Poplet',
@@ -405,6 +420,9 @@ export const translations = {
     levelLocked: '第 {n} 关包含在一次性解锁中',
     lockedHint: '前 {n} 关免费。解锁后开放全部 {total} 关。',
     columnLabel: '射向第 {n} 列',
+    howToPlayTitle: '玩法说明',
+    howToPlayCta: '玩法说明',
+    howToPlayBody: '每列都有自己的发射器。选择一列就能将下一颗泡泡发射到那一列 — 待发射的颜色显示在棋盘上方。三个或以上相邻的同色泡泡会破裂。每一关都有固定的发射次数，并且只有一种顺序能通关，所以总有解法 — 只需你去找到它。',
   },
   ja: {
     appName: 'Poplet',
@@ -469,6 +487,9 @@ export const translations = {
     levelLocked: 'レベル {n} は買い切りの解放に含まれます',
     lockedHint: '最初の {n} レベルは無料。解放で全 {total} レベル。',
     columnLabel: '{n} 列に撃つ',
+    howToPlayTitle: '遊び方',
+    howToPlayCta: '遊び方',
+    howToPlayBody: '列ごとに専用の発射台があります。列を選ぶと次のバブルがその列に発射されます — 次の色は盤面の上に表示されます。同じ色のバブルが3つ以上隣り合うと弾けます。各レベルには発射回数の上限があり、クリアできる順番はただ一つだけです。必ず道はありますので、あとは見つけるだけです。',
   },
   pt: {
     appName: 'Poplet',
@@ -533,6 +554,9 @@ export const translations = {
     levelLocked: 'O nível {n} faz parte da compra única',
     lockedHint: 'Os primeiros {n} níveis são grátis. A compra abre os {total}.',
     columnLabel: 'Disparar na coluna {n}',
+    howToPlayTitle: 'Como jogar',
+    howToPlayCta: 'Como jogar',
+    howToPlayBody: 'Cada coluna tem o seu próprio atirador. Escolha uma coluna para disparar a próxima bolha para lá — a cor em espera aparece acima do tabuleiro. Três ou mais bolhas da mesma cor que se toquem rebentam. Cada nível tem um número fixo de tiros e apenas uma ordem que o resolve, por isso há sempre uma saída — basta encontrá-la.',
   },
   ko: {
     appName: 'Poplet',
@@ -597,6 +621,9 @@ export const translations = {
     levelLocked: '레벨 {n}은 일회성 잠금 해제에 포함',
     lockedHint: '처음 {n}개 레벨은 무료. 잠금 해제 시 {total}개 전부.',
     columnLabel: '{n}번 열에 발사',
+    howToPlayTitle: '게임 방법',
+    howToPlayCta: '게임 방법',
+    howToPlayBody: '각 열에는 전용 발사기가 있습니다. 열을 선택하면 다음 버블이 그 열로 발사됩니다 — 대기 중인 색상은 보드 위에 표시됩니다. 같은 색의 버블이 세 개 이상 맞닿으면 터집니다. 각 레벨은 발사 횟수가 정해져 있고, 큰리어할 수 있는 순서는 당 하나뿐이기 엠 항상 방법이 있습니다 — 찾기만 하면 됩니다.',
   },
   it: {
     appName: 'Poplet',
@@ -661,6 +688,9 @@ export const translations = {
     levelLocked: 'Il livello {n} è nell’acquisto unico',
     lockedHint: 'I primi {n} livelli sono gratis. L’acquisto apre tutti i {total}.',
     columnLabel: 'Spara nella colonna {n}',
+    howToPlayTitle: 'Come si gioca',
+    howToPlayCta: 'Come si gioca',
+    howToPlayBody: 'Ogni colonna ha il proprio sparatore. Scegli una colonna per lanciarci la prossima bolla — il colore in coda è mostrato sopra la griglia. Tre o più bolle dello stesso colore che si toccano scoppiano. Ogni livello ha un numero fisso di tiri e un solo ordine che lo risolve, quindi c\'è sempre una via — devi solo trovarla.',
   },
   tr: {
     appName: 'Poplet',
@@ -725,6 +755,9 @@ export const translations = {
     levelLocked: 'Seviye {n} tek seferlik kilit açmaya dahil',
     lockedHint: 'İlk {n} seviye ücretsiz. Satın alım {total} seviyeyi açar.',
     columnLabel: '{n}. sütuna at',
+    howToPlayTitle: 'Nasıl oynanır',
+    howToPlayCta: 'Nasıl oynanır',
+    howToPlayBody: 'Her sütunun kendi fırlatıcısı vardır. Bir sonraki bal onu o sütuna atmak için bir sütun seçin — sıradaki renk tahtanın üstünde gösterilir. Aynı renkten birbirine değen üç veya daha fazla bal patlar. Her bölümün sabit sayıda atışı ve onu çözen tek bir sırası vardır, bu yüzden her zaman bir yol vardır — sadece onu bulmanız gerekir.',
   },
   ar: {
     appName: 'Poplet',
@@ -789,6 +822,9 @@ export const translations = {
     levelLocked: 'المستوى {n} ضمن الفتح لمرة واحدة',
     lockedHint: 'أول {n} مستويات مجانية. الشراء يفتح الـ {total} كلها.',
     columnLabel: 'أطلق على العمود {n}',
+    howToPlayTitle: 'كيفية اللعب',
+    howToPlayCta: 'كيفية اللعب',
+    howToPlayBody: 'لكل عمود قاذفة خاصة به. اختر عمودًا لإطلاق الفقاعة التالية فيه — يُعرض اللون التالي فوق اللوح. عندما تتلامس ثلاث فقاعات أو أكثر من اللون نفسه تنفجر. لكل مستوى عدد ثابت من الطلقات وترتيب واحد فقط يحلّه، فهناك دائمًا طريقة — عليك فقط إيجادها.',
   },
   fa: {
     appName: 'Poplet',
@@ -853,6 +889,9 @@ export const translations = {
     levelLocked: 'مرحلهٔ {n} بخشی از باز کردن یک‌باره است',
     lockedHint: '{n} مرحلهٔ اول رایگان است. خرید هر {total} را باز می‌کند.',
     columnLabel: 'شلیک به ستون {n}',
+    howToPlayTitle: 'روش بازی',
+    howToPlayCta: 'روش بازی',
+    howToPlayBody: 'هر ستون تیرانداز خودرا دارد. یک ستون را انتخاب کنید تا حباب بعدی به آن شلیک شود — رنگ بعدی بالای صفحه نشان داده می‌شود. سه حباب هم‌رنگ مجاور یا بیشتر می‌ترکد. هر مرحله تعداد ثابتی شلیک دارد و دقیقاً یک ترتیب آن را حل می‌کند، پس همیشه راهی هست — فقط باید پیدایش کنید.',
   },
   el: {
     appName: 'Poplet',
@@ -917,6 +956,9 @@ export const translations = {
     levelLocked: 'Το επίπεδο {n} ανήκει στο εφάπαξ ξεκλείδωμα',
     lockedHint: 'Τα πρώτα {n} επίπεδα είναι δωρεάν. Η αγορά ανοίγει και τα {total}.',
     columnLabel: 'Ρίξτε στη στήλη {n}',
+    howToPlayTitle: 'Πώς παίζεται',
+    howToPlayCta: 'Πώς παίζεται',
+    howToPlayBody: 'Κάθε στήλη έχει το δικό της εκτοξευτήριο. Επιλέξτε μια στήλη για να εκτοξεύσετε την επόμενη φουσκάλα εκεί — το επόμενο χρώμα εμφανίζεται πάνω από το ταμπλό. Τρεις ή περισσότερες εφαπτόμενες φουσκάλες ίδιου χρώματος σκάνε. Κάθε επίπεδο έχει σταθερό αριθμό βολών και μία μόνη σειρά που το λύνει, οπότε υπάρχει πάντα λύση — αρκεί να τη βρείτε.',
   },
 } as const;
 

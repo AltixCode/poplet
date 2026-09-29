@@ -1,13 +1,13 @@
-import Feather from '@expo/vector-icons/Feather';
-import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Feather from "@expo/vector-icons/Feather";
+import * as Haptics from "expo-haptics";
+import { useRouter } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
+import { Alert, Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { BannerAdSlot } from '@/components/BannerAdSlot';
-import { Button, Card, Text } from '@/components/ui';
-import { t } from '@/i18n';
+import { BannerAdSlot } from "@/components/BannerAdSlot";
+import { Button, Card, Text } from "@/components/ui";
+import { t } from "@/i18n";
 import {
   FREE_LEVELS,
   TOTAL_LEVELS,
@@ -15,12 +15,12 @@ import {
   isCleared,
   levelForIndex,
   type Board,
-} from '@/logic/puzzle';
-import { noteGameFinished } from '@/monetization/pacing';
-import { useLevelStore } from '@/store/useLevelStore';
-import { usePremiumStore } from '@/store/usePremiumStore';
-import { MIN_TOUCH_TARGET, useTheme, withAlpha } from '@/theme';
-import { useTabletColumn } from '@/theme/useTabletColumn';
+} from "@/logic/puzzle";
+import { noteGameFinished } from "@/monetization/pacing";
+import { useLevelStore } from "@/store/useLevelStore";
+import { usePremiumStore } from "@/store/usePremiumStore";
+import { MIN_TOUCH_TARGET, useTheme, withAlpha } from "@/theme";
+import { useTabletColumn } from "@/theme/useTabletColumn";
 
 /** Levels offered in the picker. */
 const PICKER_SPAN = 24;
@@ -62,32 +62,49 @@ export default function Home() {
 
   const shoot = useCallback(
     (column: number) => {
-    if (cleared || spent) return;
-    const colour = level.shots[shotAt]!;
-    const next = applyShot(board, column, colour);
-    setBoard(next);
-    setShotAt((s) => s + 1);
-    void Haptics.selectionAsync();
+      if (cleared || spent) return;
+      const colour = level.shots[shotAt]!;
+      const next = applyShot(board, column, colour);
+      setBoard(next);
+      setShotAt((s) => s + 1);
+      void Haptics.selectionAsync();
 
-    if (isCleared(next)) {
-      clearLevel(index);
-      void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      void noteGameFinished();
-    }
+      if (isCleared(next)) {
+        clearLevel(index);
+        void Haptics.notificationAsync(
+          Haptics.NotificationFeedbackType.Success,
+        );
+        void noteGameFinished();
+      }
     },
-    [board, cleared, spent, level.shots, shotAt, index, clearLevel, isPremium, isReady],
+    [
+      board,
+      cleared,
+      spent,
+      level.shots,
+      shotAt,
+      index,
+      clearLevel,
+      isPremium,
+      isReady,
+    ],
   );
+
+  const showHowToPlay = useCallback(() => {
+    Alert.alert(t("howToPlayTitle"), t("howToPlayBody"), [{ text: t("ok") }]);
+  }, []);
 
   const pickLevel = (target: number) => {
     if (!canPlay(target, isPremium)) {
-      router.push('/paywall');
+      router.push("/paywall");
       return;
     }
     load(target);
   };
 
   const columns = board[0]?.length ?? 5;
-  const cellSize = fieldWidth > 0 ? Math.floor((fieldWidth - (columns - 1) * 6) / columns) : 0;
+  const cellSize =
+    fieldWidth > 0 ? Math.floor((fieldWidth - (columns - 1) * 6) / columns) : 0;
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
@@ -98,19 +115,28 @@ export default function Home() {
           paddingHorizontal: spacing.base,
           paddingBottom: spacing.xl,
           gap: spacing.base,
-        
+
           ...tabletColumn,
         }}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.titleRow}>
           <Text variant="title" style={styles.grow}>
-            {t('appName')}
+            {t("appName")}
           </Text>
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel={t('settingsTitle')}
-            onPress={() => router.push('/settings')}
+            accessibilityLabel={t("howToPlayCta")}
+            onPress={showHowToPlay}
+            hitSlop={8}
+            style={styles.iconSlot}
+          >
+            <Feather name="help-circle" size={20} color={colors.textMuted} />
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t("settingsTitle")}
+            onPress={() => router.push("/settings")}
             hitSlop={8}
             style={styles.iconSlot}
           >
@@ -118,13 +144,18 @@ export default function Home() {
           </Pressable>
         </View>
 
-        <Text variant="heading">{t('levelLabel', { n: index + 1 })}</Text>
+        <Text variant="heading">{t("levelLabel", { n: index + 1 })}</Text>
         <Text variant="caption" tone="muted">
-          {t('oneRightAnswer')}
+          {t("oneRightAnswer")}
         </Text>
-        <Text variant="body">{t('shotsLeft', { n: Math.max(0, shotsLeft) })}</Text>
+        <Text variant="body">
+          {t("shotsLeft", { n: Math.max(0, shotsLeft) })}
+        </Text>
 
-        <View onLayout={(e) => setFieldWidth(e.nativeEvent.layout.width)} style={styles.board}>
+        <View
+          onLayout={(e) => setFieldWidth(e.nativeEvent.layout.width)}
+          style={styles.board}
+        >
           {board.map((row, r) => (
             <View key={`row-${r}`} style={styles.row}>
               {row.map((cell, c) => (
@@ -141,17 +172,24 @@ export default function Home() {
                       // thing telling them apart was the code letter. In a game
                       // whose entire mechanic is matching touching same-colour
                       // bubbles, that is the mechanic missing.
-                      backgroundColor: cell ? colors.bubble[cell] : colors.surface,
+                      backgroundColor: cell
+                        ? colors.bubble[cell]
+                        : colors.surface,
                       // An EMPTY cell is the board: it has to be visible on its own.
                       // `border` is 1.29:1 against the background in the dark theme,
                       // which is why the live iPad screenshot reads as a blank frame
                       // with 76% of it indistinguishable from the background.
-                      borderColor: cell ? colors.bubble[cell] : colors.borderStrong,
+                      borderColor: cell
+                        ? colors.bubble[cell]
+                        : colors.borderStrong,
                     },
                   ]}
                 >
-                  <Text variant="caption" style={cell ? { color: colors.onBubble[cell] } : undefined}>
-                    {cell ?? ''}
+                  <Text
+                    variant="caption"
+                    style={cell ? { color: colors.onBubble[cell] } : undefined}
+                  >
+                    {cell ?? ""}
                   </Text>
                 </View>
               ))}
@@ -164,7 +202,7 @@ export default function Home() {
             <Pressable
               key={`shoot-${c}`}
               accessibilityRole="button"
-              accessibilityLabel={t('columnLabel', { n: c + 1 })}
+              accessibilityLabel={t("columnLabel", { n: c + 1 })}
               accessibilityState={{ disabled: cleared || spent }}
               onPress={() => shoot(c)}
               style={[
@@ -184,18 +222,18 @@ export default function Home() {
 
         {cleared ? (
           <Card>
-            <Text variant="heading">{t('clearedTitle')}</Text>
+            <Text variant="heading">{t("clearedTitle")}</Text>
             <Button
-              label={t('nextCta')}
+              label={t("nextCta")}
               onPress={() => pickLevel(index + 1)}
               style={{ marginTop: spacing.sm }}
             />
           </Card>
         ) : spent ? (
           <Card>
-            <Text variant="heading">{t('outOfShots')}</Text>
+            <Text variant="heading">{t("outOfShots")}</Text>
             <Button
-              label={t('retryCta')}
+              label={t("retryCta")}
               onPress={() => load(index)}
               style={{ marginTop: spacing.sm }}
             />
@@ -203,10 +241,10 @@ export default function Home() {
         ) : null}
 
         <Text variant="heading" style={{ marginTop: spacing.base }}>
-          {t('levelsTitle')}
+          {t("levelsTitle")}
         </Text>
         <Text variant="caption" tone="muted">
-          {t('progressLabel', { done: clearedCount(), total: TOTAL_LEVELS })}
+          {t("progressLabel", { done: clearedCount(), total: TOTAL_LEVELS })}
         </Text>
         <View style={[styles.chipRow, { gap: spacing.sm }]}>
           {Array.from({ length: PICKER_SPAN }, (_, i) => i).map((target) => {
@@ -218,7 +256,9 @@ export default function Home() {
                 key={target}
                 accessibilityRole="button"
                 accessibilityLabel={
-                  allowed ? t('levelLabel', { n: target + 1 }) : t('levelLocked', { n: target + 1 })
+                  allowed
+                    ? t("levelLabel", { n: target + 1 })
+                    : t("levelLocked", { n: target + 1 })
                 }
                 accessibilityState={{ selected: chosen, disabled: !allowed }}
                 onPress={() => pickLevel(target)}
@@ -228,7 +268,9 @@ export default function Home() {
                     borderRadius: radius.md,
                     borderWidth: StyleSheet.hairlineWidth,
                     borderColor: chosen ? colors.accent : colors.border,
-                    backgroundColor: done ? withAlpha(colors.success, 0.18) : colors.surface,
+                    backgroundColor: done
+                      ? withAlpha(colors.success, 0.18)
+                      : colors.surface,
                   },
                 ]}
               >
@@ -236,14 +278,16 @@ export default function Home() {
                     or not — a dimmed number is exactly the defect found on
                     Foldup's level grid. The lock icon carries the state. */}
                 <Text variant="body">{target + 1}</Text>
-                {allowed ? null : <Feather name="lock" size={12} color={colors.textMuted} />}
+                {allowed ? null : (
+                  <Feather name="lock" size={12} color={colors.textMuted} />
+                )}
               </Pressable>
             );
           })}
         </View>
         {isPremium ? null : (
           <Text variant="caption" tone="muted">
-            {t('lockedHint', { n: FREE_LEVELS, total: TOTAL_LEVELS })}
+            {t("lockedHint", { n: FREE_LEVELS, total: TOTAL_LEVELS })}
           </Text>
         )}
       </ScrollView>
@@ -253,35 +297,35 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  titleRow: { flexDirection: 'row', alignItems: 'center' },
+  titleRow: { flexDirection: "row", alignItems: "center" },
   grow: { flex: 1 },
   iconSlot: {
     minWidth: MIN_TOUCH_TARGET,
     minHeight: MIN_TOUCH_TARGET,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   board: { gap: 6 },
-  row: { flexDirection: 'row', gap: 6 },
+  row: { flexDirection: "row", gap: 6 },
   cell: {
     borderWidth: StyleSheet.hairlineWidth,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
-  shooters: { flexDirection: 'row', gap: 6 },
+  shooters: { flexDirection: "row", gap: 6 },
   shooter: {
     minHeight: MIN_TOUCH_TARGET,
     borderWidth: StyleSheet.hairlineWidth,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
-  chipRow: { flexDirection: 'row', flexWrap: 'wrap' },
+  chipRow: { flexDirection: "row", flexWrap: "wrap" },
   chip: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 4,
     minWidth: MIN_TOUCH_TARGET,
     minHeight: MIN_TOUCH_TARGET,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
 });
