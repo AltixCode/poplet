@@ -2,7 +2,7 @@ import Feather from "@expo/vector-icons/Feather";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { BannerAdSlot } from "@/components/BannerAdSlot";
@@ -90,6 +90,10 @@ export default function Home() {
     ],
   );
 
+  const showHowToPlay = useCallback(() => {
+    Alert.alert(t("howToPlayTitle"), t("howToPlayBody"), [{ text: t("ok") }]);
+  }, []);
+
   const pickLevel = (target: number) => {
     if (!canPlay(target, isPremium)) {
       router.push("/paywall");
@@ -120,6 +124,15 @@ export default function Home() {
           <Text variant="title" style={styles.grow}>
             {t("appName")}
           </Text>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t("howToPlayCta")}
+            onPress={showHowToPlay}
+            hitSlop={8}
+            style={styles.iconSlot}
+          >
+            <Feather name="help-circle" size={20} color={colors.textMuted} />
+          </Pressable>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={t("settingsTitle")}
