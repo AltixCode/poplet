@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button, Card, Text } from "@/components/ui";
 import { t } from "@/i18n";
+import { FREE_LEVELS, TOTAL_LEVELS } from "@/logic/puzzle";
 import { PRIVACY_POLICY_URL, TERMS_URL } from "@/monetization/config";
 import { usePremiumStore } from "@/store/usePremiumStore";
 import { useTheme } from "@/theme";
@@ -214,8 +215,11 @@ export default function Paywall() {
           >
             <View style={{ flex: 5 }}>
               <BenefitTile
-                title={t(featured.title)}
-                desc={t(featured.desc)}
+                title={t(featured.title, {
+                  total: TOTAL_LEVELS,
+                  n: FREE_LEVELS,
+                })}
+                desc={t(featured.desc, { total: TOTAL_LEVELS, n: FREE_LEVELS })}
                 icon={featured.icon}
                 tall
                 acknowledged={!!acknowledged[featured.title]}
@@ -232,8 +236,14 @@ export default function Paywall() {
                 {rest.map((benefit) => (
                   <BenefitTile
                     key={benefit.title}
-                    title={t(benefit.title)}
-                    desc={t(benefit.desc)}
+                    title={t(benefit.title, {
+                      total: TOTAL_LEVELS,
+                      n: FREE_LEVELS,
+                    })}
+                    desc={t(benefit.desc, {
+                      total: TOTAL_LEVELS,
+                      n: FREE_LEVELS,
+                    })}
                     icon={benefit.icon}
                     tall={false}
                     acknowledged={!!acknowledged[benefit.title]}
